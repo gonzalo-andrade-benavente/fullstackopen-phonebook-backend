@@ -112,7 +112,24 @@ app.post('/api/persons', (req, res) => {
 
 });
 
+app.put('/api/persons/:id', (req, res) => {
 
+    const id = Number( req.params.id );
+    const number = req.body.number;
+
+    persons.map( (person) => {
+
+      if ( person.id === id) {
+        person.number = number;
+      }
+
+    });
+
+    const person = persons.find( p =>  p.id === id);
+
+    res.json( person );
+
+});
 
 app.get('/info', (req, res) => {
     const personsLength = persons.length;
