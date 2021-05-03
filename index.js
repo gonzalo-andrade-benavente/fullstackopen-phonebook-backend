@@ -43,6 +43,8 @@ app.use( express.json() );
 
 app.use( cors() );
 
+app.use( express.static('build') );
+
 morgan.token('param', function(req, res, param) {
     return JSON.stringify(req.body);
 });
