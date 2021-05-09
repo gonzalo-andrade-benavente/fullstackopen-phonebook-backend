@@ -13,8 +13,9 @@ $ heroku config:set MONGODB_URI='mongodb+srv://user:secretpasswordhere@cluster0-
 
 too see all env
 
-´´´´
+`````
 $ heroku config
-´´´´
+`````
+
 
 
