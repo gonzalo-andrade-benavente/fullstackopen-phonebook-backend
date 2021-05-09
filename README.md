@@ -17,5 +17,15 @@ too see all env
 $ heroku config
 `````
 
+all steps
+
+`````
+$ git add .
+$ git commit -m "Mi commit name"
+$ git push
+$ git push heroku
+`````
+
+
 
 

@@ -8,7 +8,7 @@ const app = express();
 morgan('tiny');
 
 const Person = require('./models/person');
-
+/* 
 let persons = [
     {
       "name": "Arto Hellas",
@@ -21,7 +21,7 @@ let persons = [
       "id": 3
     }
   ];
-
+ */
 // MDW
 
 const requestLogger = (req, res, next) => {
@@ -172,9 +172,17 @@ app.put('/api/persons/:id', (req, res, next) => {
 });
 
 app.get('/info', (req, res) => {
-    const personsLength = persons.length;
-    const date = new Date();
-    res.send(`Phonebook has info for ${ personsLength } people <br /><br /> ${ date}`);
+    
+
+    Person.find({}).then( persons => {
+        
+        const personsLength = persons.length;
+        const date = new Date();
+        res.send(`Phonebook has info for ${ personsLength } people <br /><br /> ${ date}`);
+    
+    });
+
+    
 });
 
 const unknownEndpoint = (req, res) => {
