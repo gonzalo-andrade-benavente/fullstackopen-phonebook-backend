@@ -26,6 +26,14 @@ $ git push
 $ git push heroku
 `````
 
+testing a specific unit test
+
+`````
+npm run test -- -t 'persons are returnes as json'
+npm run test -- tests/phonebook_api.test.js
+`````
+
+
 
 
 

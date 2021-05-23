@@ -98,18 +98,6 @@ personRouter.put('/:id', (req, res, next) => {
 
 });
 
-personRouter.get('/info', (req, res) => {
-    
-    Person.find({}).then( persons => {
-        
-        const personsLength = persons.length;
-        const date = new Date();
-        res.send(`Phonebook has info for ${ personsLength } people <br /><br /> ${ date}`);
-    
-    });
-
-    
-});
 
 
 module.exports = personRouter;
