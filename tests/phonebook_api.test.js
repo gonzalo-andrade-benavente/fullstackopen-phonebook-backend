@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 
-const { initialPersons } = require('./test_helper');
+const helper = require('./test_helper');
 
 const Person = require('../models/person');
 
 beforeEach(async () => {
     await Person.deleteMany({});
 
-    let personObject = Person(initialPersons[0]);
+    let personObject = Person(helper.initialPersons[0]);
     await personObject.save();
 
-    personObject = Person(initialPersons[1]);
+    personObject = Person(helper.initialPersons[1]);
     await personObject.save();
 });
 
@@ -27,8 +27,10 @@ test('persons are returnes as json', async () => {
 });
 
 test('there are two notes', async () => {
-    const response = await api.get('/api/persons');
-    expect(response.body).toHaveLength(initialPersons.length);
+    const personsAtEnd = await helper.personsInBd();
+    // const res = await api.get('/api/persons');
+    expect(personsAtEnd).toHaveLength(helper.initialPersons.length);
+    //expect(res.body).toHaveLength(helper.initialPersons.length);
 });
 
 
@@ -48,8 +50,8 @@ test('Person without number is not added', async () => {
         .send(newPerson)
         .expect(400);
 
-    const res = await api.get('/api/persons');
-    expect(res.body).toHaveLength(initialPersons.length);
+    const personsAtEnd = await helper.personsInBd();
+    expect(personsAtEnd).toHaveLength(helper.initialPersons.length);
     
 });
 
@@ -66,10 +68,10 @@ test('a valid person can be added', async () => {
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
-    const res = await api.get('/api/persons');
-    const numbers = res.body.map(p => p.number);
+    const personsAtEnd = await helper.personsInBd();
+    expect(personsAtEnd).toHaveLength(helper.initialPersons.length + 1);
 
-    expect(res.body).toHaveLength(initialPersons.length + 1);
+    const numbers = personsAtEnd.map(p => p.number);
     expect(numbers).toContain('+596 9681 2109');
 
 });
