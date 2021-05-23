@@ -1,13 +1,9 @@
 const mongoose = require('mongoose');
 const supertest = require('supertest');
 
+const { initialPersons } = require('./test_helper');
+
 const Person = require('../models/person');
-
-const initialPersons = [
-    { name: 'name test 1', number: '+569 9680 2109' },
-    { name: 'name test 2', number: '+569 2109 9680' }
-];
-
 
 beforeEach(async () => {
     await Person.deleteMany({});
@@ -19,7 +15,7 @@ beforeEach(async () => {
     await personObject.save();
 });
 
-const app = require('../index');
+const { app, server } = require('../index');
 
 const api = supertest(app);
 
@@ -42,8 +38,46 @@ test('the first note is about HTTP methods', async () => {
     expect(numbers).toContain('+569 9680 2109');
 });
 
+test('Person without number is not added', async () => {
+    const newPerson = {
+        name: 'Person Test 3'
+    }
+
+    await api   
+        .post('/api/persons')
+        .send(newPerson)
+        .expect(400);
+
+    const res = await api.get('/api/persons');
+    expect(res.body).toHaveLength(initialPersons.length);
+    
+});
+
+test('a valid person can be added', async () => {
+
+    const newPerson = {
+        name: 'Person Test 3',
+        number: '+596 9681 2109'
+    }
+
+    await api
+        .post('/api/persons')
+        .send(newPerson)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+    const res = await api.get('/api/persons');
+    const numbers = res.body.map(p => p.number);
+
+    expect(res.body).toHaveLength(initialPersons.length + 1);
+    expect(numbers).toContain('+596 9681 2109');
+
+});
+
+
 
 afterAll(() => {
     mongoose.connection.close();
+    server.close();
 });
 

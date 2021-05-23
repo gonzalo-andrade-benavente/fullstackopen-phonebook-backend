@@ -54,9 +54,13 @@ app.use( middleware.unknownEndpoint );
 app.use( middleware.errorHandler );
 
 const PORT = config.PORT || 3000;
-app.listen( PORT , () => {
+
+const server = app.listen( PORT , () => {
     //console.log(`Server running at por ${ PORT }`);
     logger.info(`Server running at por ${ PORT }`);
 });
 
-module.exports = app;
+module.exports = {
+    app
+    , server
+};
